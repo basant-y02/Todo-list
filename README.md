@@ -49,13 +49,3 @@ The app allows you to add, edit, mark as done, and delete tasks — all with sou
 
 ---
 
-## 📂 Project Structure
-todo-project/
-├─ index.html # Main HTML page
-├─ style.css # Custom styles
-├─ main.js # All app logic
-├─ assets/ # Media assets
-│ ├─ addTask.mp3
-│ ├─ bubblepop.mp3
-│ └─ delete.mp3
-└─ README.md # Project documentation
