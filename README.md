@@ -3,7 +3,7 @@
     <img src="https://img.shields.io/badge/🌐 Live Demo-00C853?style=for-the-badge" alt="Live Demo">
   </a>
   &nbsp;
-  <a href="https://github.com/USERNAME/todo-list/archive/refs/heads/main.zip" target="_blank">
+  <a href="https://github.com/basant-y02/todo-list/archive/refs/heads/main.zip" target="_blank">
     <img src="https://img.shields.io/badge/⬇️ Download ZIP-2962FF?style=for-the-badge" alt="Download ZIP">
   </a>
 </p>
@@ -17,8 +17,8 @@ The app allows you to add, edit, mark as done, and delete tasks — all with sou
 ---
 
 ## 🚀 Live Demo
-👉 [View the project](https://USERNAME.github.io/todo-list/)  
-> Replace `USERNAME` with your GitHub username after enabling **GitHub Pages**.
+👉 [View the project](https://basant-y02.github.io/todo-list/)  
+> Replace `basant-y02` with your GitHub basant-y02 after enabling **GitHub Pages**.
 
 ---
 
