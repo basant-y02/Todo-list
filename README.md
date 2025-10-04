@@ -1,3 +1,13 @@
+<p align="center">
+  <a href="https://basant-y02.github.io/todo-list/" target="_blank">
+    <img src="https://img.shields.io/badge/🌐 Live Demo-00C853?style=for-the-badge" alt="Live Demo">
+  </a>
+  &nbsp;
+  <a href="https://github.com/USERNAME/todo-list/archive/refs/heads/main.zip" target="_blank">
+    <img src="https://img.shields.io/badge/⬇️ Download ZIP-2962FF?style=for-the-badge" alt="Download ZIP">
+  </a>
+</p>
+
 # 📝 To-Do List Web App
 
 A modern and interactive **To-Do List** web application built using  
