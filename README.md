@@ -17,7 +17,7 @@ The app allows you to add, edit, mark as done, and delete tasks — all with sou
 ---
 
 ## 🚀 Live Demo
-👉 [View the project](https://basant-y02.github.io/todo-list/)  
+👉 [View the project](https://basant-y02.github.io/Todo-list/)  
 > Replace `basant-y02` with your GitHub basant-y02 after enabling **GitHub Pages**.
 
 ---
