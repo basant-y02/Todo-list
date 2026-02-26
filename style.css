@@ -1,24 +1,141 @@
 body {
+    margin: 0;
+    padding: 0;
     min-height: 100vh;
-    /* Dark gradient background */
     background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-    display: flex;
-    justify-content: center;
-    align-items: center;
     font-family: 'Arial', sans-serif;
-    padding: 1rem;
 }
 
-.container {
-    background: rgba(255, 255, 255, 0.05);
-    backdrop-filter: blur(15px);
-    -webkit-backdrop-filter: blur(15px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 20px;
-    padding: clamp(1rem, 4vw, 2rem);
+.app-container {
+    display: flex;
+    min-height: 100vh;
+}
+
+/* =============== Sidebar =============== */
+.sidebar {
+    width: 280px;
+    background: rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(10px);
+    border-right: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;
+    box-sizing: border-box;
+}
+
+.sidebar-header {
+    margin-bottom: 1.5rem;
+}
+
+.new-file-btn {
     width: 100%;
-    max-width: 800px;
-    margin: auto;
+    background: rgba(103, 140, 255, 0.2) !important;
+    border: 1px solid rgba(103, 140, 255, 0.3) !important;
+    color: #e9ecef !important;
+    padding: 0.75rem !important;
+    border-radius: 10px !important;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: right;
+}
+
+.new-file-btn:hover {
+    background: rgba(103, 140, 255, 0.4) !important;
+    transform: translateY(-1px);
+}
+
+.files-list {
+    flex: 1;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding-left: 0.25rem;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
+}
+
+.files-list::-webkit-scrollbar {
+    width: 5px;
+}
+
+.files-list::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.files-list::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 10px;
+}
+
+.file-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.75rem 1rem;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    color: #e9ecef;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    position: relative;
+}
+
+.file-item:hover {
+    background: rgba(103, 140, 255, 0.15);
+    border-color: rgba(103, 140, 255, 0.3);
+}
+
+.file-item.active-file {
+    background: rgba(103, 140, 255, 0.3);
+    border-color: rgba(103, 140, 255, 0.6);
+}
+
+.file-name {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.95rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 180px;
+}
+
+.file-name i {
+    color: rgba(103, 140, 255, 0.8);
+    font-size: 1rem;
+}
+
+.file-delete-btn {
+    opacity: 0;
+    color: #ff6b6b;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    font-size: 1rem;
+    padding: 0.2rem 0.5rem;
+    border-radius: 5px;
+}
+
+.file-item:hover .file-delete-btn {
+    opacity: 0.8;
+}
+
+.file-delete-btn:hover {
+    opacity: 1 !important;
+    transform: scale(1.1);
+    background: rgba(255, 107, 107, 0.2);
+    color: #ff4757 !important;
+}
+
+/* =============== Main Content =============== */
+.main-content {
+    flex: 1;
+    padding: 2rem;
+    overflow-y: auto;
+    max-width: calc(100% - 280px);
+    box-sizing: border-box;
 }
 
 .form {
@@ -28,53 +145,9 @@ body {
     flex-wrap: wrap;
     background: rgba(255, 255, 255, 0.03);
     border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
 }
 
-.files-container {
-    margin-bottom: 1.5rem;
-    padding: 0.5rem;
-    background: rgba(255, 255, 255, 0.02);
-    border-radius: 12px;
-}
-
-.file-tab {
-    transition: all 0.3s ease;
-    user-select: none;
-    font-size: 0.9rem;
-}
-
-.file-tab:hover {
-    background: rgba(103, 140, 255, 0.2) !important;
-    transform: translateY(-1px);
-}
-
-.file-tab.active-file {
-    background: rgba(103, 140, 255, 0.4) !important;
-    border-color: rgba(103, 140, 255, 0.6) !important;
-}
-
-.file-delete-btn {
-    opacity: 0.6;
-    transition: opacity 0.2s;
-}
-
-.file-delete-btn:hover {
-    opacity: 1;
-    color: #ff4757 !important;
-}
-
-.add-file-btn {
-    margin-right: 0.5rem;
-    background: rgba(103, 140, 255, 0.2) !important;
-    border: 1px solid rgba(103, 140, 255, 0.3) !important;
-    color: #e9ecef !important;
-    transition: all 0.3s ease;
-}
-
-.add-file-btn:hover {
-    background: rgba(103, 140, 255, 0.4) !important;
-    transform: translateY(-1px);
-}
 .input {
     flex: 1;
     min-width: 200px;
@@ -97,7 +170,7 @@ body {
 
 .add {
     padding: clamp(0.5rem, 2vw, 0.75rem) clamp(1rem, 3vw, 1.5rem);
-    min-width: 120px;
+    min-width: 100px;
     border: 1px solid rgba(103, 140, 255, 0.3) !important;
     background: rgba(103, 140, 255, 0.2) !important;
     color: #e9ecef !important;
@@ -112,16 +185,32 @@ body {
     transform: translateY(-2px);
 }
 
+.delete-all {
+    background: rgba(255, 69, 89, 0.2) !important;
+    border: 1px solid rgba(255, 69, 89, 0.3) !important;
+    color: #e9ecef !important;
+    padding: clamp(0.5rem, 2vw, 0.75rem) clamp(1rem, 3vw, 1.5rem) !important;
+    min-width: 100px;
+    border-radius: 10px;
+    font-size: clamp(0.875rem, 2vw, 1rem);
+    cursor: pointer;
+    transition: all 0.3s ease !important;
+}
+
+.delete-all:hover {
+    background: rgba(54, 0, 5, 0.91) !important;
+    transform: translateY(-2px);
+}
+
 .tasks {
     display: flex;
     flex-direction: column;
     gap: clamp(0.5rem, 2vw, 1rem);
-    max-height: 400px;
+    max-height: 70vh;
     overflow-y: auto;
     padding-right: 0.5rem;
     scrollbar-width: thin;
     scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
-
 }
 
 .task {
@@ -169,7 +258,6 @@ body {
     background: rgba(103, 140, 255, 0.5);
     border-color: transparent;
     animation: togglePopDone 0.3s ease;
-    /* cursor: pointer; */
 }
 
 @keyframes togglePopDone {
@@ -205,31 +293,6 @@ body {
     cursor: pointer;
 }
 
-.delete-all {
-    background: rgba(255, 69, 89, 0.2) !important;
-    border: 1px solid rgba(255, 69, 89, 0.3) !important;
-    color: #e9ecef !important;
-    padding: clamp(0.5rem, 2vw, 0.75rem) clamp(1rem, 3vw, 1.5rem) !important;
-    min-width: 120px;
-    border-radius: 10px;
-    font-size: clamp(0.875rem, 2vw, 1rem);
-    cursor: pointer;
-    transition: all 0.3s ease !important;
-}
-
-.delete-all:hover {
-    background: rgba(54, 0, 5, 0.91) !important;
-    transform: translateY(-2px);
-}
-
-.add i {
-    margin-right: 0.5rem;
-}
-
-.delete-all i {
-    margin-right: 0.5rem;
-}
-
 .btn-container {
     display: flex;
     gap: 0.5rem;
@@ -244,6 +307,7 @@ body {
     border-radius: 0.5rem;
     cursor: pointer;
     transition: all 0.3s ease;
+    font-size: 0.9rem;
 }
 
 .edit {
@@ -266,10 +330,108 @@ body {
     background: rgba(54, 0, 5, 0.91);
 }
 
+
+.container {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    padding: clamp(1rem, 4vw, 2rem);
+    width: 100%;
+    max-width: 800px;
+    margin: auto;
+}
+
+.files-container {
+    margin-bottom: 1.5rem;
+    padding: 0.5rem;
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: 12px;
+}
+
+.file-tab {
+    transition: all 0.3s ease;
+    user-select: none;
+    font-size: 0.9rem;
+}
+
+.file-tab:hover {
+    background: rgba(103, 140, 255, 0.2) !important;
+    transform: translateY(-1px);
+}
+
+.file-tab.active-file {
+    background: rgba(103, 140, 255, 0.4) !important;
+    border-color: rgba(103, 140, 255, 0.6) !important;
+}
+
+.add-file-btn {
+    margin-right: 0.5rem;
+    background: rgba(103, 140, 255, 0.2) !important;
+    border: 1px solid rgba(103, 140, 255, 0.3) !important;
+    color: #e9ecef !important;
+    transition: all 0.3s ease;
+}
+
+.add-file-btn:hover {
+    background: rgba(103, 140, 255, 0.4) !important;
+    transform: translateY(-1px);
+}
+
+.add i {
+    margin-right: 0.5rem;
+}
+
+.delete-all i {
+    margin-right: 0.5rem;
+}
+
+
 .task.done i.fa-check {
     opacity: 1;
     color: #1a1a2e;
 }
+
+/* =============== Responsive =============== */
+@media (max-width: 768px) {
+    .app-container {
+        flex-direction: column;
+    }
+    .sidebar {
+        width: 100%;
+        border-right: none;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        padding: 1rem;
+        max-height: 200px;
+    }
+    .main-content {
+        max-width: 100%;
+        padding: 1rem;
+    }
+    .files-list {
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+    .file-item {
+        flex: 0 0 auto;
+        max-width: 200px;
+    }
+    .form {
+        flex-direction: column;
+    }
+    .input, .add, .delete-all {
+        width: 100%;
+    }
+}
+
+/* إضافة دعم للحركة المخفضة */
+@media (prefers-reduced-motion: reduce) {
+    .add, .task, .delete, .file-item, .new-file-btn {
+        transition: none !important;
+    }
+}
+
 
 /* Media Queries for different screen sizes */
 @media (max-width: 480px) {
@@ -298,12 +460,4 @@ body {
     .container {
         width: 85%;
     }
-}
-
-/* Add support for reduced motion preferences */
-@media (prefers-reduced-motion: reduce) {
-    .add, .task, .delete {
-        transition: none !important;
-    }
-
 }
