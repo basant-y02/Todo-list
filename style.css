@@ -456,7 +456,18 @@ body {
     opacity: 1;
     color: #1a1a2e;
 }
+/* Drag and drop visual feedback */
+.file-item.drag-over,
+.task.drag-over {
+    border: 2px dashed rgba(103, 140, 255, 0.8) !important;
+    background: rgba(103, 140, 255, 0.1) !important;
+    transform: scale(1.02);
+}
 
+/* Prevent text selection while dragging */
+.dragging {
+    user-select: none;
+}
 /* =============== Responsive =============== */
 @media (max-width: 768px) {
     .app-container {
@@ -534,6 +545,7 @@ input, select, textarea {
         width: 85%;
     }
 }
+
 
 
 
