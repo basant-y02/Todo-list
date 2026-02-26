@@ -196,7 +196,7 @@ function createNewFile() {
             saveToLocalStorage();
             renderFiles();
             switchFile(newFile.id);
-            document.getElementById('deleteSound').play().catch(err => console.log(err));
+            document.getElementById('addSound').play().catch(err => console.log(err));
         }
     });
 }
@@ -322,7 +322,7 @@ function addTaskToCurrentFile(taskText) {
     currentFile.tasks.push(newTask);
     saveToLocalStorage();
 
-    document.getElementById('deleteSound').play().catch(err => console.log(err));
+    document.getElementById('addSound').play().catch(err => console.log(err));
 
     renderTasks();
 }
@@ -334,7 +334,7 @@ function deleteTaskFromCurrentFile(taskId) {
     currentFile.tasks = currentFile.tasks.filter(t => t.id != taskId);
     saveToLocalStorage();
 
-    document.getElementById('deleteSound').play().catch(err => console.log(err));
+    document.getElementById('addSound').play().catch(err => console.log(err));
 
     renderTasks();
 }
@@ -426,6 +426,7 @@ function dragStartFile(event, fileId) {
     event.dataTransfer.effectAllowed = "move";
     // Reset dragging flag after a short delay (to allow click to be prevented)
     setTimeout(() => { isDragging = false; }, 200);
+    document.getElementById('toggleSound').play().catch(err => console.log(err));
 }
 
 function dragOverFile(event) {
@@ -433,6 +434,7 @@ function dragOverFile(event) {
     event.dataTransfer.dropEffect = "move";
     // Add visual feedback
     event.target.closest('.file-item')?.classList.add('drag-over');
+    document.getElementById('toggleSound').play().catch(err => console.log(err));
 }
 
 function dropFile(event, targetFileId) {
@@ -458,6 +460,7 @@ function dropFile(event, targetFileId) {
     renderFiles();
     // If current file was moved, ensure it's still active (currentFileId remains same)
     renderTasks(); // tasks may not change, but re-render anyway
+    document.getElementById('toggleSound').play().catch(err => console.log(err));
 }
 
 // Task drag and drop functions
@@ -466,6 +469,7 @@ function dragStartTask(event, taskId, fileId) {
     event.dataTransfer.setData("text/plain", JSON.stringify({ taskId, fileId }));
     event.dataTransfer.effectAllowed = "move";
     setTimeout(() => { isDragging = false; }, 200);
+    document.getElementById('toggleSound').play().catch(err => console.log(err));
 }
 
 function dropTask(event, targetTaskId, targetFileId) {
@@ -494,6 +498,7 @@ function dropTask(event, targetTaskId, targetFileId) {
 
     saveToLocalStorage();
     renderTasks();
+    document.getElementById('toggleSound').play().catch(err => console.log(err));
 }
 
 // Add drag over handler for tasks container
@@ -551,6 +556,7 @@ function createDefaultFile() {
 window.createNewFile = createNewFile;
 window.switchFile = switchFile;
 window.deleteFile = deleteFile;
+
 
 
 
