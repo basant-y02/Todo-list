@@ -200,6 +200,35 @@ function createNewFile() {
     });
 }
 
+function renameFile(fileId) {
+    const file = arrayOfFiles.find(f => f.id == fileId);
+    if (!file) return;
+
+    Swal.fire({
+        title: 'Rename file',
+        input: 'text',
+        inputLabel: 'New file name',
+        inputValue: file.name,
+        background: '#1a1a2e',
+        color: '#e9ecef',
+        confirmButtonColor: 'rgba(103, 140, 255, 0.8)',
+        cancelButtonColor: 'rgba(255, 69, 89, 0.8)',
+        showCancelButton: true,
+        confirmButtonText: 'Rename',
+        cancelButtonText: 'Cancel',
+        inputValidator: (value) => {
+            if (!value) return 'Please enter a file name';
+        }
+    }).then((result) => {
+        if (result.isConfirmed) {
+            file.name = result.value;
+            saveToLocalStorage();
+            renderFiles();
+            document.getElementById('toggleSound').play().catch(err => console.log(err));
+        }
+    });
+}
+
 function deleteFile(fileId) {
     const file = arrayOfFiles.find(f => f.id == fileId);
     if (!file) return;
@@ -255,9 +284,14 @@ function renderFiles() {
                     <i class="fas fa-folder"></i>
                     <span>${file.name}</span>
                 </div>
-                <span class="file-delete-btn" onclick="event.stopPropagation(); deleteFile(${file.id})" title="Delete file">
-                    <i class="fas fa-trash-alt"></i>
-                </span>
+                <div class="file-actions">
+                    <span class="file-edit-btn" onclick="event.stopPropagation(); renameFile(${file.id})" title="Rename file">
+                        <i class="fas fa-pen"></i>
+                    </span>
+                    <span class="file-delete-btn" onclick="event.stopPropagation(); deleteFile(${file.id})" title="Delete file">
+                        <i class="fas fa-trash-alt"></i>
+                    </span>
+                </div>
             </div>
         `;
     });
@@ -415,3 +449,4 @@ function createDefaultFile() {
 window.createNewFile = createNewFile;
 window.switchFile = switchFile;
 window.deleteFile = deleteFile;
+
