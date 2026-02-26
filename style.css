@@ -30,6 +30,51 @@ body {
     border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
+.files-container {
+    margin-bottom: 1.5rem;
+    padding: 0.5rem;
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: 12px;
+}
+
+.file-tab {
+    transition: all 0.3s ease;
+    user-select: none;
+    font-size: 0.9rem;
+}
+
+.file-tab:hover {
+    background: rgba(103, 140, 255, 0.2) !important;
+    transform: translateY(-1px);
+}
+
+.file-tab.active-file {
+    background: rgba(103, 140, 255, 0.4) !important;
+    border-color: rgba(103, 140, 255, 0.6) !important;
+}
+
+.file-delete-btn {
+    opacity: 0.6;
+    transition: opacity 0.2s;
+}
+
+.file-delete-btn:hover {
+    opacity: 1;
+    color: #ff4757 !important;
+}
+
+.add-file-btn {
+    margin-right: 0.5rem;
+    background: rgba(103, 140, 255, 0.2) !important;
+    border: 1px solid rgba(103, 140, 255, 0.3) !important;
+    color: #e9ecef !important;
+    transition: all 0.3s ease;
+}
+
+.add-file-btn:hover {
+    background: rgba(103, 140, 255, 0.4) !important;
+    transform: translateY(-1px);
+}
 .input {
     flex: 1;
     min-width: 200px;
@@ -260,4 +305,5 @@ body {
     .add, .task, .delete {
         transition: none !important;
     }
+
 }
