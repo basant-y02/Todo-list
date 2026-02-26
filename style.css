@@ -115,16 +115,13 @@ body {
 }
 
 
-
-
-
 .file-actions {
     display: flex;
     gap: 0.3rem;
     align-items: center;
 }
 
-.file-edit-btn {
+/* .file-edit-btn {
     opacity: 0;
     color: #74b9ff;
     transition: opacity 0.2s ease, transform 0.2s ease;
@@ -163,7 +160,38 @@ body {
     transform: scale(1.1);
     background: rgba(255, 107, 107, 0.2);
     color: #ff4757 !important;
+} */
+
+
+.file-edit-btn,
+.file-delete-btn {
+    opacity: 1;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 5px;
+    padding: 0.3rem 0.6rem;
+    margin: 0 2px;
+    transition: all 0.2s ease;
+    font-size: 0.9rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
 }
+
+.file-item:hover .file-edit-btn,
+.file-item:hover .file-delete-btn {
+    opacity: 1; 
+}
+
+.file-edit-btn:hover {
+    background: rgba(116, 185, 255, 0.3);
+    transform: scale(1.05);
+}
+
+.file-delete-btn:hover {
+    background: rgba(255, 107, 107, 0.3);
+    transform: scale(1.05);
+}
+
 
 /* =============== Main Content =============== */
 .main-content {
@@ -506,5 +534,6 @@ input, select, textarea {
         width: 85%;
     }
 }
+
 
 
