@@ -114,7 +114,38 @@ body {
     font-size: 1rem;
 }
 
+
+
+
+
+.file-actions {
+    display: flex;
+    gap: 0.3rem;
+    align-items: center;
+}
+
+.file-edit-btn {
+    opacity: 0;
+    color: #74b9ff;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    font-size: 1rem;
+    padding: 0.2rem 0.5rem;
+    border-radius: 5px;
+}
+
+.file-item:hover .file-edit-btn {
+    opacity: 0.8;
+}
+
+.file-edit-btn:hover {
+    opacity: 1 !important;
+    transform: scale(1.1);
+    background: rgba(116, 185, 255, 0.2);
+    color: #0984e3 !important;
+}
+
 .file-delete-btn {
+    margin-left: 0; 
     opacity: 0;
     color: #ff6b6b;
     transition: opacity 0.2s ease, transform 0.2s ease;
@@ -475,4 +506,5 @@ input, select, textarea {
         width: 85%;
     }
 }
+
 
