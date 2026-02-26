@@ -196,7 +196,7 @@ function createNewFile() {
             saveToLocalStorage();
             renderFiles();
             switchFile(newFile.id);
-            document.getElementById('addSound').play().catch(err => console.log(err));
+            playSound('addSound');
         }
     });
 }
@@ -322,7 +322,7 @@ function addTaskToCurrentFile(taskText) {
     currentFile.tasks.push(newTask);
     saveToLocalStorage();
 
-    document.getElementById('addSound').play().catch(err => console.log(err));
+    playSound('addSound');
 
     renderTasks();
 }
@@ -334,7 +334,7 @@ function deleteTaskFromCurrentFile(taskId) {
     currentFile.tasks = currentFile.tasks.filter(t => t.id != taskId);
     saveToLocalStorage();
 
-    document.getElementById('addSound').play().catch(err => console.log(err));
+    document.getElementById('deleteSound').play().catch(err => console.log(err));
 
     renderTasks();
 }
@@ -552,14 +552,22 @@ function createDefaultFile() {
     saveToLocalStorage();
 }
 
+
+// Helper function to play sounds safely
+function playSound(soundId) {
+    const sound = document.getElementById(soundId);
+    if (sound) {
+        // Reset the audio to start (allows replay even if already playing)
+        sound.currentTime = 0;
+        // Play and catch any errors (like file not found)
+        sound.play().catch(err => {
+            console.log(`Sound ${soundId} could not be played:`, err);
+        });
+    } else {
+        console.log(`Sound element with id "${soundId}" not found.`);
+    }
+}
 // ======================== Expose functions to global scope (for onclick) ========================
 window.createNewFile = createNewFile;
 window.switchFile = switchFile;
 window.deleteFile = deleteFile;
-
-
-
-
-
-
-
