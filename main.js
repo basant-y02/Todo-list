@@ -1,20 +1,20 @@
-// ======================== المتغيرات العامة ========================
+// ======================== Global Variables ========================
 let input = document.querySelector(".input");
 let submitBtn = document.querySelector(".add");
 let tasksDiv = document.querySelector(".tasks");
 let deleteAllBtn = document.querySelector(".delete-all");
-let filesContainer = document.querySelector(".files-container");
+let filesList = document.getElementById("filesList");
 
-// هيكل البيانات الجديد: مصفوفة من الملفات
+// Data structure: array of files
 let arrayOfFiles = [];
 let currentFileId = null;
 
-// تحميل البيانات من localStorage عند البدء
+// Load data from localStorage on startup
 loadFromLocalStorage();
 
-// ======================== الأحداث ========================
+// ======================== Event Listeners ========================
 
-// إضافة مهمة جديدة
+// Add new task
 submitBtn.onclick = function () {
     if (!currentFileId) {
         Swal.fire({
@@ -34,9 +34,9 @@ submitBtn.onclick = function () {
     }
 };
 
-// التعامل مع النقر على منطقة المهام (تعديل، حذف، تبديل الحالة)
+// Handle clicks on tasks area (edit, delete, toggle)
 tasksDiv.addEventListener("click", (e) => {
-    // زر التعديل
+    // Edit button
     if (e.target.classList.contains("edit") || e.target.closest(".edit")) {
         const editBtn = e.target.closest(".edit");
         const taskDiv = editBtn.closest(".task");
@@ -53,14 +53,14 @@ tasksDiv.addEventListener("click", (e) => {
             cancelButtonColor: 'rgba(255, 69, 89, 0.8)',
             showCancelButton: true,
             inputValidator: (value) => {
-                if (!value) return 'Something needs to be written!';
+                if (!value) return 'You need to write something!';
             }
         }).then((result) => {
             if (result.isConfirmed) {
                 editTaskInCurrentFile(taskId, result.value);
                 Swal.fire({
                     title: 'Updated!',
-                    text: 'The task was successfully modified',
+                    text: 'Task has been updated.',
                     icon: 'success',
                     background: '#1a1a2e',
                     color: '#e9ecef',
@@ -71,15 +71,15 @@ tasksDiv.addEventListener("click", (e) => {
         });
     }
 
-    // زر الحذف
+    // Delete button
     if (e.target.classList.contains("del") || e.target.closest(".del")) {
         const delBtn = e.target.closest(".del");
         const taskDiv = delBtn.closest(".task");
         const taskId = taskDiv.getAttribute("data-id");
 
         Swal.fire({
-            title: 'Delete the task?',
-            text: "You will not be able to undo this!",
+            title: 'Delete task?',
+            text: "You won't be able to revert this!",
             icon: 'warning',
             background: '#1a1a2e',
             color: '#e9ecef',
@@ -93,7 +93,7 @@ tasksDiv.addEventListener("click", (e) => {
                 taskDiv.remove();
                 Swal.fire({
                     title: 'Deleted!',
-                    text: 'The task was deleted',
+                    text: 'Task has been deleted.',
                     icon: 'success',
                     background: '#1a1a2e',
                     color: '#e9ecef',
@@ -104,7 +104,7 @@ tasksDiv.addEventListener("click", (e) => {
         });
     }
 
-    // النقر على المهمة نفسها (تبديل الحالة)
+    // Click on task itself (toggle completion)
     if (e.target.classList.contains("task")) {
         const taskId = e.target.getAttribute("data-id");
         toggleTaskInCurrentFile(taskId);
@@ -112,7 +112,7 @@ tasksDiv.addEventListener("click", (e) => {
     }
 });
 
-// حذف جميع المهام في الملف النشط
+// Delete all tasks in current file
 deleteAllBtn.onclick = function() {
     if (!currentFileId) {
         Swal.fire({
@@ -144,7 +144,7 @@ deleteAllBtn.onclick = function() {
                 deleteAllTasksInCurrentFile();
                 Swal.fire({
                     title: 'Deleted!',
-                    text: 'All tasks have been deleted',
+                    text: 'All tasks have been deleted.',
                     icon: 'success',
                     background: '#1a1a2e',
                     color: '#e9ecef',
@@ -166,24 +166,23 @@ deleteAllBtn.onclick = function() {
     }
 };
 
-// ======================== دوال الملفات (Files) ========================
+// ======================== File Functions ========================
 
-// دالة لإنشاء ملف جديد
 function createNewFile() {
     Swal.fire({
-        title: 'Create a new file',
+        title: 'Create new file',
         input: 'text',
-        inputLabel: 'File Name',
+        inputLabel: 'File name',
         inputValue: 'File ' + (arrayOfFiles.length + 1),
         background: '#1a1a2e',
         color: '#e9ecef',
         confirmButtonColor: 'rgba(103, 140, 255, 0.8)',
         cancelButtonColor: 'rgba(255, 69, 89, 0.8)',
         showCancelButton: true,
-        confirmButtonText: 'create',
-        cancelButtonText: 'cancel',
+        confirmButtonText: 'Create',
+        cancelButtonText: 'Cancel',
         inputValidator: (value) => {
-            if (!value) return 'Please enter the file name';
+            if (!value) return 'Please enter a file name';
         }
     }).then((result) => {
         if (result.isConfirmed) {
@@ -195,22 +194,19 @@ function createNewFile() {
             arrayOfFiles.push(newFile);
             saveToLocalStorage();
             renderFiles();
-            // التبديل إلى الملف الجديد
             switchFile(newFile.id);
-            // تشغيل صوت
             document.getElementById('addSound').play().catch(err => console.log(err));
         }
     });
 }
 
-// دالة لحذف ملف
 function deleteFile(fileId) {
     const file = arrayOfFiles.find(f => f.id == fileId);
     if (!file) return;
 
     Swal.fire({
-        title: `Delete file "${file.name}"؟`,
-        text: "All tasks within it will be deleted!",
+        title: `Delete file "${file.name}"?`,
+        text: "All tasks inside it will be deleted!",
         icon: 'warning',
         background: '#1a1a2e',
         color: '#e9ecef',
@@ -220,10 +216,8 @@ function deleteFile(fileId) {
         confirmButtonText: 'Yes, delete it'
     }).then((result) => {
         if (result.isConfirmed) {
-            // إزالة الملف من المصفوفة
             arrayOfFiles = arrayOfFiles.filter(f => f.id != fileId);
             
-            // إذا كان الملف المحذوف هو النشط، ننتقل إلى أول ملف (إن وجد)
             if (currentFileId == fileId) {
                 if (arrayOfFiles.length > 0) {
                     currentFileId = arrayOfFiles[0].id;
@@ -236,55 +230,46 @@ function deleteFile(fileId) {
             renderFiles();
             renderTasks();
 
-            // تشغيل صوت الحذف
             document.getElementById('deleteSound').play().catch(err => console.log(err));
 
-            // إذا لم يتبق أي ملفات، نعرض رسالة
             if (arrayOfFiles.length === 0) {
-                tasksDiv.innerHTML = '<p class="text-white-50 text-center">No files found. Create a new file.</p>';
+                tasksDiv.innerHTML = '<p class="text-white-50 text-center">No files. Create a new file.</p>';
             }
         }
     });
 }
 
-// دالة للتبديل بين الملفات
 function switchFile(fileId) {
     currentFileId = fileId;
-    renderFiles();  // لتحديث التبويب النشط
-    renderTasks();  // لعرض مهام الملف الجديد
+    renderFiles();
+    renderTasks();
 }
 
-// دالة لعرض الملفات في الأعلى (تبويبات)
 function renderFiles() {
     let html = '';
-    
-    // زر إضافة ملف جديد
-    html += `<button class="btn add-file-btn" style="background: rgba(103, 140, 255, 0.2); border: 1px solid rgba(103, 140, 255, 0.3); color: #e9ecef;" onclick="createNewFile()"><i class="fas fa-plus"></i> New file</button>`;
-
-    // عرض كل ملف
     arrayOfFiles.forEach(file => {
         const isActive = (currentFileId == file.id) ? 'active-file' : '';
         html += `
-            <div class="file-tab d-flex align-items-center gap-2 px-3 py-2 rounded ${isActive}" style="background: ${isActive ? 'rgba(103, 140, 255, 0.3)' : 'rgba(255,255,255,0.05)'}; border: 1px solid rgba(255,255,255,0.1); cursor: pointer;" onclick="switchFile(${file.id})">
-                <span><i class="fas fa-folder me-1"></i>${file.name}</span>
-                <span class="file-delete-btn" onclick="event.stopPropagation(); deleteFile(${file.id})" style="color: #ff6b6b; margin-left: 8px;">
+            <div class="file-item ${isActive}" onclick="switchFile(${file.id})">
+                <div class="file-name">
+                    <i class="fas fa-folder"></i>
+                    <span>${file.name}</span>
+                </div>
+                <span class="file-delete-btn" onclick="event.stopPropagation(); deleteFile(${file.id})" title="Delete file">
                     <i class="fas fa-trash-alt"></i>
                 </span>
             </div>
         `;
     });
-
-    filesContainer.innerHTML = html;
+    filesList.innerHTML = html;
 }
 
-// دالة مساعدة للحصول على الملف النشط
 function getCurrentFile() {
     return arrayOfFiles.find(f => f.id == currentFileId);
 }
 
-// ======================== دوال المهام (Tasks) داخل الملف النشط ========================
+// ======================== Task Functions (within current file) ========================
 
-// إضافة مهمة إلى الملف النشط
 function addTaskToCurrentFile(taskText) {
     const currentFile = getCurrentFile();
     if (!currentFile) return;
@@ -298,13 +283,11 @@ function addTaskToCurrentFile(taskText) {
     currentFile.tasks.push(newTask);
     saveToLocalStorage();
 
-    // تشغيل صوت الإضافة
     document.getElementById('addSound').play().catch(err => console.log(err));
 
     renderTasks();
 }
 
-// حذف مهمة من الملف النشط
 function deleteTaskFromCurrentFile(taskId) {
     const currentFile = getCurrentFile();
     if (!currentFile) return;
@@ -312,13 +295,11 @@ function deleteTaskFromCurrentFile(taskId) {
     currentFile.tasks = currentFile.tasks.filter(t => t.id != taskId);
     saveToLocalStorage();
 
-    // تشغيل صوت الحذف
     document.getElementById('deleteSound').play().catch(err => console.log(err));
 
     renderTasks();
 }
 
-// تبديل حالة المهمة (completed)
 function toggleTaskInCurrentFile(taskId) {
     const currentFile = getCurrentFile();
     if (!currentFile) return;
@@ -328,14 +309,12 @@ function toggleTaskInCurrentFile(taskId) {
         task.completed = !task.completed;
         saveToLocalStorage();
 
-        // تشغيل صوت التبديل
         document.getElementById('toggleSound').play().catch(err => console.log(err));
     }
 
     renderTasks();
 }
 
-// تعديل نص المهمة
 function editTaskInCurrentFile(taskId, newText) {
     const currentFile = getCurrentFile();
     if (!currentFile) return;
@@ -345,14 +324,12 @@ function editTaskInCurrentFile(taskId, newText) {
         task.title = newText;
         saveToLocalStorage();
 
-        // تشغيل صوت التعديل (نفس صوت التبديل)
         document.getElementById('toggleSound').play().catch(err => console.log(err));
     }
 
     renderTasks();
 }
 
-// حذف جميع المهام في الملف النشط
 function deleteAllTasksInCurrentFile() {
     const currentFile = getCurrentFile();
     if (!currentFile) return;
@@ -360,45 +337,34 @@ function deleteAllTasksInCurrentFile() {
     currentFile.tasks = [];
     saveToLocalStorage();
 
-    // تشغيل صوت الحذف
     document.getElementById('deleteSound').play().catch(err => console.log(err));
 
     renderTasks();
 }
 
-// دالة عرض المهام الخاصة بالملف النشط في الصفحة
 function renderTasks() {
     const currentFile = getCurrentFile();
     
     if (!currentFile || currentFile.tasks.length === 0) {
-        tasksDiv.innerHTML = '<p class="text-white-50 text-center">There are no tasks in this file.</p>';
+        tasksDiv.innerHTML = '<p class="text-white-50 text-center">No tasks in this file.</p>';
         return;
     }
 
     tasksDiv.innerHTML = "";
 
     currentFile.tasks.forEach((task) => {
-        // إنشاء div المهمة
         let div = document.createElement("div");
         div.className = task.completed ? "task done" : "task";
         div.setAttribute("data-id", task.id);
         div.appendChild(document.createTextNode(task.title));
 
-        // حاوية الأزرار
         let btnContainer = document.createElement("div");
         btnContainer.className = "btn-container";
-        btnContainer.style.cssText = `
-            float: right;
-            display: flex;
-            gap: 0.5rem;
-        `;
 
-        // زر التعديل
         let editSpan = document.createElement("span");
         editSpan.className = "edit";
         editSpan.innerHTML = '<i class="fas fa-edit"></i> Edit';
         
-        // زر الحذف
         let deleteSpan = document.createElement("span");
         deleteSpan.className = "del";
         deleteSpan.innerHTML = '<i class="fas fa-trash-alt"></i> Delete';
@@ -411,27 +377,22 @@ function renderTasks() {
     });
 }
 
-// ======================== دوال الحفظ والتخزين المحلي ========================
+// ======================== Local Storage Functions ========================
 
-// حفظ البيانات الكاملة في localStorage
 function saveToLocalStorage() {
     localStorage.setItem("todoFiles", JSON.stringify(arrayOfFiles));
 }
 
-// تحميل البيانات من localStorage
 function loadFromLocalStorage() {
     let data = localStorage.getItem("todoFiles");
     if (data) {
         arrayOfFiles = JSON.parse(data);
-        // إذا كان هناك ملفات، نختار أول ملف كافتراضي
         if (arrayOfFiles.length > 0) {
             currentFileId = arrayOfFiles[0].id;
         } else {
-            // لا توجد ملفات، ننشئ ملفاً افتراضياً
             createDefaultFile();
         }
     } else {
-        // أول استخدام: إنشاء ملف افتراضي
         createDefaultFile();
     }
 
@@ -439,11 +400,10 @@ function loadFromLocalStorage() {
     renderTasks();
 }
 
-// إنشاء ملف افتراضي إذا لم يكن هناك أي ملفات
 function createDefaultFile() {
     const defaultFile = {
         id: Date.now(),
-        name: "file 1",
+        name: "File 1",
         tasks: []
     };
     arrayOfFiles = [defaultFile];
@@ -451,7 +411,7 @@ function createDefaultFile() {
     saveToLocalStorage();
 }
 
-// ======================== تصدير الدوال للنطاق العام (للاستخدام في onclick) ========================
+// ======================== Expose functions to global scope (for onclick) ========================
 window.createNewFile = createNewFile;
 window.switchFile = switchFile;
 window.deleteFile = deleteFile;
