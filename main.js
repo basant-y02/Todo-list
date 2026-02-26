@@ -8,7 +8,8 @@ let filesList = document.getElementById("filesList");
 // Data structure: array of files
 let arrayOfFiles = [];
 let currentFileId = null;
-
+// isDragging
+let isDragging = false;
 // Load data from localStorage on startup
 loadFromLocalStorage();
 
@@ -279,7 +280,11 @@ function renderFiles() {
     arrayOfFiles.forEach(file => {
         const isActive = (currentFileId == file.id) ? 'active-file' : '';
         html += `
-            <div class="file-item ${isActive}" onclick="switchFile(${file.id})">
+            <div class="file-item ${isActive}" draggable="true" 
+                 ondragstart="dragStartFile(event, ${file.id})" 
+                 ondragover="dragOverFile(event)"
+                 ondrop="dropFile(event, ${file.id})"
+                 onclick="if(!isDragging) switchFile(${file.id})">
                 <div class="file-name">
                     <i class="fas fa-folder"></i>
                     <span>${file.name}</span>
@@ -390,6 +395,10 @@ function renderTasks() {
         let div = document.createElement("div");
         div.className = task.completed ? "task done" : "task";
         div.setAttribute("data-id", task.id);
+        div.setAttribute("draggable", "true");
+        div.ondragstart = (e) => dragStartTask(e, task.id, currentFile.id);
+        div.ondragover = (e) => e.preventDefault();
+        div.ondrop = (e) => dropTask(e, task.id, currentFile.id);
         div.appendChild(document.createTextNode(task.title));
 
         let btnContainer = document.createElement("div");
@@ -410,7 +419,100 @@ function renderTasks() {
         tasksDiv.appendChild(div);
     });
 }
+// File drag and drop functions
+function dragStartFile(event, fileId) {
+    isDragging = true;
+    event.dataTransfer.setData("text/plain", fileId);
+    event.dataTransfer.effectAllowed = "move";
+    // Reset dragging flag after a short delay (to allow click to be prevented)
+    setTimeout(() => { isDragging = false; }, 200);
+}
 
+function dragOverFile(event) {
+    event.preventDefault();
+    event.dataTransfer.dropEffect = "move";
+    // Add visual feedback
+    event.target.closest('.file-item')?.classList.add('drag-over');
+}
+
+function dropFile(event, targetFileId) {
+    event.preventDefault();
+    isDragging = false;
+    // Remove visual feedback
+    document.querySelectorAll('.file-item').forEach(el => el.classList.remove('drag-over'));
+    
+    const draggedFileId = event.dataTransfer.getData("text/plain");
+    if (!draggedFileId || draggedFileId == targetFileId) return;
+
+    // Find indices
+    const draggedIndex = arrayOfFiles.findIndex(f => f.id == draggedFileId);
+    const targetIndex = arrayOfFiles.findIndex(f => f.id == targetFileId);
+    if (draggedIndex === -1 || targetIndex === -1) return;
+
+    // Reorder array
+    const [draggedFile] = arrayOfFiles.splice(draggedIndex, 1);
+    arrayOfFiles.splice(targetIndex, 0, draggedFile);
+
+    // Save and re-render
+    saveToLocalStorage();
+    renderFiles();
+    // If current file was moved, ensure it's still active (currentFileId remains same)
+    renderTasks(); // tasks may not change, but re-render anyway
+}
+
+// Task drag and drop functions
+function dragStartTask(event, taskId, fileId) {
+    isDragging = true;
+    event.dataTransfer.setData("text/plain", JSON.stringify({ taskId, fileId }));
+    event.dataTransfer.effectAllowed = "move";
+    setTimeout(() => { isDragging = false; }, 200);
+}
+
+function dropTask(event, targetTaskId, targetFileId) {
+    event.preventDefault();
+    isDragging = false;
+    // Remove visual feedback
+    document.querySelectorAll('.task').forEach(el => el.classList.remove('drag-over'));
+
+    const data = event.dataTransfer.getData("text/plain");
+    if (!data) return;
+    const { taskId: draggedTaskId, fileId: draggedFileId } = JSON.parse(data);
+
+    // Only allow reorder within the same file
+    if (draggedFileId != targetFileId || draggedTaskId == targetTaskId) return;
+
+    const currentFile = getCurrentFile();
+    if (!currentFile) return;
+
+    const draggedIndex = currentFile.tasks.findIndex(t => t.id == draggedTaskId);
+    const targetIndex = currentFile.tasks.findIndex(t => t.id == targetTaskId);
+    if (draggedIndex === -1 || targetIndex === -1) return;
+
+    // Reorder tasks
+    const [draggedTask] = currentFile.tasks.splice(draggedIndex, 1);
+    currentFile.tasks.splice(targetIndex, 0, draggedTask);
+
+    saveToLocalStorage();
+    renderTasks();
+}
+
+// Add drag over handler for tasks container
+tasksDiv.addEventListener("dragover", (e) => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = "move";
+    // Add visual feedback to the target task
+    const targetTask = e.target.closest('.task');
+    if (targetTask) {
+        targetTask.classList.add('drag-over');
+    }
+});
+
+tasksDiv.addEventListener("dragleave", (e) => {
+    const targetTask = e.target.closest('.task');
+    if (targetTask) {
+        targetTask.classList.remove('drag-over');
+    }
+});
 // ======================== Local Storage Functions ========================
 
 function saveToLocalStorage() {
@@ -449,5 +551,6 @@ function createDefaultFile() {
 window.createNewFile = createNewFile;
 window.switchFile = switchFile;
 window.deleteFile = deleteFile;
+
 
 
