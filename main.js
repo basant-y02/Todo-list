@@ -196,7 +196,7 @@ function createNewFile() {
             saveToLocalStorage();
             renderFiles();
             switchFile(newFile.id);
-            document.getElementById('addSound').play().catch(err => console.log(err));
+            document.getElementById('addftSound').play().catch(err => console.log(err));
         }
     });
 }
@@ -322,7 +322,7 @@ function addTaskToCurrentFile(taskText) {
     currentFile.tasks.push(newTask);
     saveToLocalStorage();
 
-    document.getElementById('addSound').play().catch(err => console.log(err));
+    document.getElementById('addftSound').play().catch(err => console.log(err));
 
     renderTasks();
 }
@@ -334,7 +334,7 @@ function deleteTaskFromCurrentFile(taskId) {
     currentFile.tasks = currentFile.tasks.filter(t => t.id != taskId);
     saveToLocalStorage();
 
-    document.getElementById('addSound').play().catch(err => console.log(err));
+    document.getElementById('addftSound').play().catch(err => console.log(err));
 
     renderTasks();
 }
@@ -556,6 +556,7 @@ function createDefaultFile() {
 window.createNewFile = createNewFile;
 window.switchFile = switchFile;
 window.deleteFile = deleteFile;
+
 
 
 
