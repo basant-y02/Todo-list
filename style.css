@@ -454,7 +454,16 @@ body {
         width: 95%;
     }
 }
+/* Fix for automatic zoom on mobile when focusing on input fields */
+input, select, textarea {
+    font-size: 16px !important;
+}
 
+@media screen and (max-width: 768px) {
+    input, select, textarea {
+        font-size: 16px !important;
+    }
+}
 @media (min-width: 769px) and (max-width: 1024px) {
     .container {
         width: 90%;
@@ -466,3 +475,4 @@ body {
         width: 85%;
     }
 }
+
