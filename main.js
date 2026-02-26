@@ -396,12 +396,12 @@ function renderTasks() {
         // زر التعديل
         let editSpan = document.createElement("span");
         editSpan.className = "edit";
-        editSpan.innerHTML = '<i class="fas fa-edit"></i> تعديل';
+        editSpan.innerHTML = '<i class="fas fa-edit"></i> Edit';
         
         // زر الحذف
         let deleteSpan = document.createElement("span");
         deleteSpan.className = "del";
-        deleteSpan.innerHTML = '<i class="fas fa-trash-alt"></i> حذف';
+        deleteSpan.innerHTML = '<i class="fas fa-trash-alt"></i> Delete';
         
         btnContainer.appendChild(editSpan);
         btnContainer.appendChild(deleteSpan);
